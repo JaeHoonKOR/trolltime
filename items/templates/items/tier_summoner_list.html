@@ -1,0 +1,16 @@
+<!-- items/templates/items/tier_summoner_list.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Summoner List</title>
+</head>
+<body>
+    <h1>Summoner List</h1>
+    <ul>
+        {% for puuid in puuids %}
+            <li>{{ puuid }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

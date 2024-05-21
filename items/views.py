@@ -1,39 +1,10 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Item
-from .forms import ItemForm
+# items/views.py
 
-def item_list(request):
-    items = Item.objects.all()
-    return render(request, 'items/item_list.html', {'items': items})
+from django.shortcuts import render
+from .riot_api import get_tier_summoner_list, get_summoner_puuid
 
-def item_detail(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    return render(request, 'items/item_detail.html', {'item': item})
-
-def item_create(request):
-    if request.method == "POST":
-        form = ItemForm(request.POST)
-        if form.is_valid():
-            item = form.save()
-            return redirect('item_detail', pk=item.pk)
-    else:
-        form = ItemForm()
-    return render(request, 'items/item_form.html', {'form': form})
-
-def item_update(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    if request.method == "POST":
-        form = ItemForm(request.POST, instance=item)
-        if form.is_valid():
-            item = form.save()
-            return redirect('item_detail', pk=item.pk)
-    else:
-        form = ItemForm(instance=item)
-    return render(request, 'items/item_form.html', {'form': form})
-
-def item_delete(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    if request.method == "POST":
-        item.delete()
-        return redirect('item_list')
-    return render(request, 'items/item_confirm_delete.html', {'item': item})
+def tier_summoner_list(request, tier='DIAMOND', division='I'):
+    summoners = get_tier_summoner_list(tier, division)
+    summoner_ids = [summoner['summonerId'] for summoner in summoners]
+    puuids = [get_summoner_puuid(summoner_id) for summoner_id in summoner_ids]
+    return render(request, 'items/tier_summoner_list.html', {'puuids': puuids})
