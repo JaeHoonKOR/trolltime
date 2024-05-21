@@ -2,9 +2,14 @@
 
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('summoners/', include('items.urls')),  # 앱의 URL 패턴 포함
-    path('', include('items.urls')),  # 루트 URL을 앱의 URL 패턴으로 연결
+    path('summoners/', include('items.urls')),
+    path('', include('items.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

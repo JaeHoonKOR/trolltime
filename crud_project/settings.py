@@ -126,3 +126,8 @@ load_dotenv(os.path.join(BASE_DIR, '.env.local'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 RIOT_API_KEY = os.getenv('RIOT_API_KEY')
+
+# STATIC 및 MEDIA 설정 추가
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
