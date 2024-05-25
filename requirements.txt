@@ -1,3 +1,4 @@
-Django==3.2.7
+Django==5.0.6
 django-cors-headers==3.8.0
 asgiref==3.4.1
+aiohttp==3.9.5

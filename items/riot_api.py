@@ -1,8 +1,8 @@
 # items/riot_api.py
 
-import requests
 import os
-
+import requests
+import time
 # 환경 변수에서 API_KEY 가져오기
 API_KEY = os.getenv('RIOT_API_KEY')
 REGION = 'kr'
@@ -12,6 +12,11 @@ def get_tier_summoner_list(tier, division, page=1):
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()
+    elif response.status_code == 429:
+        retry_after = int(response.headers.get('Retry-After', 1))
+        print(f"Rate limit exceeded. Retrying in {retry_after} seconds...")
+        time.sleep(retry_after)
+        return get_tier_summoner_list(tier, division, page)
     else:
         response.raise_for_status()
 
@@ -20,5 +25,10 @@ def get_summoner_puuid(summoner_id):
     response = requests.get(url)
     if response.status_code == 200:
         return response.json().get('puuid')
+    elif response.status_code == 429:
+        retry_after = int(response.headers.get('Retry-After', 1))
+        print(f"Rate limit exceeded. Retrying in {retry_after} seconds...")
+        time.sleep(retry_after)
+        return get_summoner_puuid(summoner_id)
     else:
         response.raise_for_status()

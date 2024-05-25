@@ -2,8 +2,6 @@
 
 from django.shortcuts import render
 from .riot_api import get_tier_summoner_list, get_summoner_puuid
-from django.http import HttpResponse
-import os
 
 def tier_summoner_list(request, tier='DIAMOND', division='I'):
     summoners = get_tier_summoner_list(tier, division)
@@ -11,10 +9,11 @@ def tier_summoner_list(request, tier='DIAMOND', division='I'):
     puuids = [get_summoner_puuid(summoner_id) for summoner_id in summoner_ids]
     return render(request, 'items/tier_summoner_list.html', {'puuids': puuids})
 
-
-
 def serve_riot_file(request):
     file_path = os.path.join('media', 'riot.txt')
-    with open(file_path, 'r') as file:
-        content = file.read()
-    return HttpResponse(content, content_type='text/plain')
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            content = file.read()
+        return HttpResponse(content, content_type='text/plain')
+    else:
+        raise Http404("File not found")
