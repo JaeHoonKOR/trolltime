@@ -9,7 +9,6 @@ riot.txt
 # 가상환경
 venv/
 env/
-.env.local
 # Django
 *.log
 *.pot
